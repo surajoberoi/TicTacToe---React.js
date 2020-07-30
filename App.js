@@ -1,39 +1,25 @@
-import React,{useState} from 'react';
-import logo from './logo.svg';
-import Icon from "./components/Icon"
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import Icon from "./components/Icon";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
+import { Card, CardBody, Container, Button, Col, Row } from "reactstrap";
+import "bootstrap/dist/css/bootstrap.css";
+import "./App.css";
 
-import {Card, CardBody, Container,Button, Col, Row} from 'reactstrap'
-
-
-const itemArray = new Array(9).fill("empty")
+const itemArray = new Array(9).fill("empty");
 
 const App = () => {
-
-  const [isCross, setIsCross] = useState(false)
-  const [winMessage, setWinMessage] = useState("")
-  const [moves, setMoves] = useState(0)
-
+  const [isCross, setIsCross] = useState(false);
+  const [winMessage, setWinMessage] = useState("");
 
   const reloadGame = () => {
-    
-    setIsCross(false)
-    setWinMessage("")
-    itemArray.fill("empty",0,9)
-
-  }
-
-  const CheckTie = () => {
-    if(moves == 8)
-    {
-      setWinMessage("TIE")
-    }
-  }
+    setIsCross(false);
+    setWinMessage("");
+    itemArray.fill("empty", 0, 9);
+  };
 
   const checkIsWinner = () => {
     //  checking  winner of the game
@@ -86,33 +72,26 @@ const App = () => {
     ) {
       setWinMessage(`${itemArray[2]} won`);
     }
-  
   };
 
-
   const changeItem = itemNumber => {
-    if(winMessage){
-      return toast(winMessage, {type:"success"})
+    if (winMessage) {
+      return toast(winMessage, { type: "success" });
     }
 
-    if(itemArray[itemNumber] == "empty"){ 
-        itemArray[itemNumber] = isCross ? "cross" : "circle"
-        setIsCross(!isCross)
-        setMoves(moves + 1)
-        console.log(moves)
+    if (itemArray[itemNumber] === "empty") {
+      itemArray[itemNumber] = isCross ? "cross" : "circle";
+      setIsCross(!isCross);
     } else {
-      return toast("Already Filled", {type:"error"})
+      return toast("already filled", { type: "error" });
     }
 
     checkIsWinner();
-    CheckTie();
-    
-  }
-
+  };
 
   return (
     <Container className="p-5">
-      <ToastContainer position="bottom-center"/>
+      <ToastContainer position="bottom-center" />
       <Row>
         <Col md={6} className="offset-md-3">
           {winMessage ? (
@@ -120,45 +99,28 @@ const App = () => {
               <h1 className="text-success text-uppercase text-center">
                 {winMessage}
               </h1>
-              <Button
-              color="success"
-              block
-              onClick={reloadGame}
-              >
-                Restart Game
+              <Button color="success" block onClick={reloadGame}>
+                Reload the game
               </Button>
             </div>
           ) : (
             <h1 className="text-center text-warning">
-              {isCross ? "Cross" : "Circle" } Turn
+              {isCross ? "Cross" : "Circle"} turns
             </h1>
-          ) }
+          )}
           <div className="grid">
-          {itemArray.map((item,index)=>{
-            return (
-              <Card color="warning" onClick={ ()=> changeItem(index)}>
+            {itemArray.map((item, index) => (
+              <Card color="warning" onClick={() => changeItem(index)}>
                 <CardBody className="box">
-                  <Icon name={item}/> 
+                  <Icon name={item} />
                 </CardBody>
               </Card>
-            )
-          })}
+            ))}
           </div>
         </Col>
       </Row>
     </Container>
   );
-}
+};
 
 export default App;
-
-
-
-/*
-".map" means that we want to loop through the Array
-
-Icon is passing a property of name which goes to the switch case
-in Icon.js
-The default name is "empty" because we have used fill method of JS
-to fill the itemArray with "Empty"
-*/
